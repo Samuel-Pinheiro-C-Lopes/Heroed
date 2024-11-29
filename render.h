@@ -1,12 +1,20 @@
 #ifndef RENDER_H
 #define RENDER_H
 
+// DEPENDÊNCIAS
 #include <SDL2/SDL.h>
 #include <cstdlib>
 #include <iostream>
 
+// DIMENSÕES
 #define res_Height (1366)
 #define res_Width (976)
+
+// SAÍDAS SIMPLES
+#define SUCESS -110
+#define FAILURE -111
+
+using namespace std;
 
 class _SDL_Main
 {
@@ -21,6 +29,7 @@ class _SDL_Main
         ~_SDL_Main();
         int START();
         int END();
+        void PRINT_SDL_ERROR(string message);
 };
 
 #endif
