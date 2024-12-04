@@ -3,7 +3,6 @@
 
 // DEPENDÊNCIAS
 #include <SDL2/SDL.h>
-#include <cstdlib>
 #include <iostream>
 
 // DIMENSÕES
@@ -16,6 +15,27 @@
 
 using namespace std;
 
+class _SDL_Entity
+{
+   private:
+    int height;
+    int width;
+    bool show;
+   public:
+    // native
+    _SDL_Entity();
+    ~_SDL_Entity();
+    
+    // getters / setters
+    int Get_Height();
+    int Get_Width();
+    void Set_Width(int width);
+    void Set_Height(int height);
+    
+    // movement
+    int Move();
+};
+
 class _SDL_Main
 {
     private:
@@ -25,10 +45,18 @@ class _SDL_Main
         int width;
         int** win_grid;
     public:
+        // native
         _SDL_Main();
         ~_SDL_Main();
+        
+        // base
         int START();
         int END();
+        
+        // grid
+        int SET_GRID();
+        int CHECK_COLLISION(_SDL_Entity* Entity);
+
         void PRINT_SDL_ERROR(string message);
 };
 

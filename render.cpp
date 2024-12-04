@@ -1,5 +1,4 @@
 #include "render.h"
-#include <SDL2/SDL_video.h>
 
 _SDL_Main::_SDL_Main()
 {
