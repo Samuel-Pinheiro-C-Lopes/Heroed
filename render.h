@@ -15,35 +15,60 @@
 
 using namespace std;
 
-class _SDL_Entity
+class Position
+{
+    private:
+    int _X;
+    int _Y;
+
+    public:
+    Position();
+    int X();
+    int Y();
+    void X(int X);
+    void Y(int Y);
+    void Add_X(int X);
+    void Add_Y(int Y);
+};
+
+class Entity
 {
    private:
-    int height;
-    int width;
-    bool show;
+    int _Height;
+    int _Width;
+    bool _Show;
+    int _Life;
+    int _Damage;
+    Position _Position;
+
    public:
     // native
-    _SDL_Entity();
-    ~_SDL_Entity();
+    Entity();
+    ~Entity();
     
     // getters / setters
-    int Get_Height();
-    int Get_Width();
-    void Set_Width(int width);
-    void Set_Height(int height);
+    int Height();
+    int Width();
+    int Show();
+    int Life();
+    int Damage();
+    class Position Position();
     
+    void Position(int x, int y);
+
     // movement
-    int Move();
+    int Move(int x, int y);
 };
 
 class _SDL_Main
 {
     private:
-        SDL_Window* window;
-        SDL_Surface* win_surface;
+        SDL_Window* Window;
+        SDL_Surface* WinSurface;
         int height;
         int width;
         int** win_grid;
+
     public:
         // native
         _SDL_Main();
@@ -55,7 +80,7 @@ class _SDL_Main
         
         // grid
         int SET_GRID();
-        int CHECK_COLLISION(_SDL_Entity* Entity);
+        int CHECK_COLLISION(Entity* Entity);
 
         void PRINT_SDL_ERROR(string message);
 };
