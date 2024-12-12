@@ -13,7 +13,24 @@
 #define SUCESS -110
 #define FAILURE -111
 
+#define iplayer -10
+#define imonster -11
+#define iground -20
+#define iterrain -21
+
 using namespace std;
+
+class Terrain
+{
+    private:
+        int _X;
+        int _Y;
+        int _Content;
+    public:
+        int X();
+        int Y();
+        int Content();  
+};
 
 class Position
 {
@@ -40,6 +57,7 @@ class Entity
     int _Life;
     int _Damage;
     Position _Position;
+    int _Type;
 
    public:
     // native
@@ -52,27 +70,30 @@ class Entity
     int Show();
     int Life();
     int Damage();
+    int Type();
     class Position Position();
     
     void Position(int x, int y);
 
+    bool CheckCollision(Primary& p);
+
     // movement
-    int Move(int x, int y);
+    int Move(int x, int y, Primary& p);
 };
 
-class _SDL_Main
+class Primary
 {
     private:
         SDL_Window* Window;
         SDL_Surface* WinSurface;
-        int height;
-        int width;
-        int** win_grid;
+        int Height;
+        int Width;
+        Terrain** WinGrid;
 
     public:
         // native
-        _SDL_Main();
-        ~_SDL_Main();
+        Primary();
+        ~Primary();
         
         // base
         int START();
@@ -80,9 +101,12 @@ class _SDL_Main
         
         // grid
         int SET_GRID();
-        int CHECK_COLLISION(Entity* Entity);
+        bool CHECK_COLLISION(Entity* Entity);
+        bool UPDATE_GRID(Entity* Entity);
 
         void PRINT_SDL_ERROR(string message);
+
+        friend class Entity;
 };
 
 #endif

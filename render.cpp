@@ -2,20 +2,20 @@
 
 #pragma region SDL_MAIN
 
-_SDL_Main::_SDL_Main()
+Primary::Primary()
 {
     this->Window = NULL;
     this->WinSurface = NULL;
-    this->height = res_Height;
-    this->width = res_Width;
+    this->Height = res_Height;
+    this->Width = res_Width;
 
-    this->win_grid = (int**) malloc(sizeof(int*) * this->height);
+    this->WinGrid = (Terrain**) malloc(sizeof(Terrain*) * this->Height);
 
-    for (int i = 0; i < this->width; i++)
-        this->win_grid[i] = (int*) malloc(sizeof(int) * this->height);
+    for (int i = 0; i < this->Width; i++)
+        this->WinGrid[i] = (Terrain*) malloc(sizeof(Terrain) * this->Height);
 }
 
-int _SDL_Main::START()
+int Primary::START()
 {
     // initializates the SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -25,7 +25,7 @@ int _SDL_Main::START()
     }
 
     // creates the window
-    this->Window = SDL_CreateWindow("Main", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->width, this->height, SDL_WINDOW_SHOWN);
+    this->Window = SDL_CreateWindow("Main", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->Width, this->Height, SDL_WINDOW_SHOWN);
 
     // verify if the window was created successfully
     if (!Window)
@@ -47,7 +47,7 @@ int _SDL_Main::START()
     return SUCESS;
 }
 
-int _SDL_Main::END()
+int Primary::END()
 {
     // Destroy memory allocations
     SDL_DestroyWindow(this->Window); // window
@@ -58,15 +58,25 @@ int _SDL_Main::END()
     return SUCESS;
 }
 
-void _SDL_Main::PRINT_SDL_ERROR(string message) // 
+void Primary::PRINT_SDL_ERROR(string message) // 
 {
     cout << message << ": " << SDL_GetError() << endl;
     system("read");
 }
 
-_SDL_Main::~_SDL_Main()
+Primary::~Primary()
 {
     this->END();
+}
+
+bool Primary::CHECK_COLLISION(Entity* Entity)
+{
+    for (int i = Entity->Position().X(); i < Entity->Position().X() + Entity->Width(); i++)
+        for (int j = Entity->Position().Y(); i < Entity->Position().Y() + Entity->Height(); i++)
+            if (WinGrid[i][j].Content() == iterrain || WinGrid[i][j].Content() == imonster)
+                return false;
+
+    return true;
 }
 
 #pragma endregion
@@ -90,6 +100,11 @@ Position Entity::Position()
     return this->_Position;
 }
 
+int Entity::Type()
+{
+    return this->_Type;
+}
+
 void Entity::Position(int X, int Y)
 {
     this->_Position.X(X);
@@ -98,11 +113,25 @@ void Entity::Position(int X, int Y)
 
 ////////////////////////////////////////////////
 
-int Entity::Move(int X, int Y)
+int Entity::Move(int X, int Y, Primary& p)
 {
     this->_Position.Add_X(X);
     this->_Position.Add_Y(Y);
+    if (this->CheckCollision(p))
+        p.UPDATE_GRID(this);
+    else
+        return FAILURE;
+
+    return SUCESS;
 }
+
+bool Entity::CheckCollision(Primary& p)
+{
+    return p.CHECK_COLLISION(this);
+}
+
+////////////////////////////////
+
 
 #pragma endregion
 
